@@ -21,10 +21,10 @@ kill other sniper,but still have control of all the Blocks .
 
 Input : A NxN board , which is all 0's , and N (number of snipers )
 Output : Return 1 if its General can place all N snipers or else return 0 .
-		 Also modify the battlefield ,such that Blocks which have sniper placed are denoted by 1
-		 and all other blocks as 0.
+Also modify the battlefield ,such that Blocks which have sniper placed are denoted by 1
+and all other blocks as 0.
 
-		 Note : If there are multiple correct arrangements ,Arrange in any 1 of the possible ways.
+Note : If there are multiple correct arrangements ,Arrange in any 1 of the possible ways.
 Example Input :
 int battle_field[4][4]={0};
 solve_nsnipers(&battle_field[0][0],4);
@@ -43,6 +43,61 @@ P.S: The Above Problem is just a modified version of a popular BackTracking prob
 */
 
 #include "stdafx.h"
+#include<stdlib.h>
+
+void queen(int, int, int *, int *, int *);
+
 int solve_nsnipers(int *battlefield, int n){
-	return 0;
+	int *board, count = 0;
+	if ((battlefield == NULL) || (n <= 3))
+		return 0;
+	board = (int *)malloc(n*sizeof(int));
+	queen(1, n, board, battlefield, &count);
+	return count;
+}
+void print(int n, int *board, int *battlefield)
+{
+	int i, j;
+	for (i = 1; i <= n; ++i)
+	{
+		for (j = 1; j <= n; ++j)
+		{
+			if (board[i] == j)
+			{
+				battlefield[((i - 1) * n) + (j - 1)] = 1;
+			}
+		}
+	}
+}
+int place(int row, int column, int *board)
+{
+	int i;
+	for (i = 1; i <= row - 1; ++i)
+	{
+		if ((board[i] == column) || (abs(board[i] - column) == abs(i - row)))
+			return 0;
+	}
+	return 1;
+}
+void queen(int row, int n, int *board, int *battlefield, int *c)
+{
+	int column, k;
+	if (*c != 1)
+	{
+		for (column = 1; column <= n; ++column)
+		{
+			if (place(row, column, board))
+			{
+				board[row] = column;
+				if (row == n)
+				{
+					*c = 1;
+					print(n, board, battlefield);
+					return;
+				}
+				else
+					queen(row + 1, n, board, battlefield, c);
+			}
+		}
+	}
 }
