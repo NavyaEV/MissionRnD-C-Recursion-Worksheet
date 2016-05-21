@@ -33,51 +33,50 @@ Note : Check the function Parameters ,Its a double pointer .
 
 #include "stdafx.h"
 #include<stdlib.h>
-void print_spiral(int **, int, int, int, int *);
+void print_spiral(int **, int, int, int, int *,int *);
 
 int *spiral(int rows, int columns, int **input_array)
 {
-	int *arr;
+	int *arr,index=-1;
 	if ((rows <= 0) || (columns <= 0) || (input_array == NULL))
 		return NULL;
 	arr = (int *)malloc((rows*columns)*sizeof(int));
-	print_spiral(input_array, rows, columns, 0, arr);
+	print_spiral(input_array, rows, columns, 0, arr,&index);
 	return arr;
 }
-void print_spiral(int **mat, int m, int n, int k, int *arr) {
-	static int index = -1;
+void print_spiral(int **mat, int m, int n, int k, int *arr,int *index) {
 	int i, j;
 	if (m <= 0 || n <= 0)
 		return;
 	if (m == 1) {
 		for (j = 0; j < n; j++)
 		{
-			arr[++index] = mat[k][k + j];
+			arr[++*index] = mat[k][k + j];
 		}
 		return;
 	}
 	if (n == 1) {
 		for (i = 0; i < m; i++)
 		{
-			arr[++index] = mat[k + i][k];
+			arr[++*index] = mat[k + i][k];
 		}
 		return;
 	}
 	for (j = 0; j < n - 1; j++)
 	{
-		arr[++index] = mat[k][k + j];
+		arr[++*index] = mat[k][k + j];
 	}
 	for (i = 0; i < m - 1; i++)
 	{
-		arr[++index] = mat[k + i][k + n - 1];
+		arr[++*index] = mat[k + i][k + n - 1];
 	}
 	for (j = 0; j < n - 1; j++)
 	{
-		arr[++index] = mat[k + m - 1][k + n - 1 - j];
+		arr[++*index] = mat[k + m - 1][k + n - 1 - j];
 	}
 	for (i = 0; i < m - 1; i++)
 	{
-		arr[++index] = mat[k + m - 1 - i][k];
+		arr[++*index] = mat[k + m - 1 - i][k];
 	}
-	print_spiral(mat, m - 2, n - 2, k + 1, arr);
+	print_spiral(mat, m - 2, n - 2, k + 1, arr,index);
 }
