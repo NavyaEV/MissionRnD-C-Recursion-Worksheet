@@ -42,7 +42,7 @@ int *spiral(int rows, int columns, int **input_array)
 		return NULL;
 	arr = (int *)malloc((rows*columns)*sizeof(int));
 	print_spiral(input_array, rows, columns, 0, arr);
-	return &arr[0];
+	return arr;
 }
 void print_spiral(int **mat, int m, int n, int k, int *arr) {
 	static int index = -1;

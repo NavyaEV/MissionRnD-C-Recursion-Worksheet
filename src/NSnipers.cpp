@@ -44,60 +44,43 @@ P.S: The Above Problem is just a modified version of a popular BackTracking prob
 
 #include "stdafx.h"
 #include<stdlib.h>
+int isSafe(int *, int, int, int);
 
-void queen(int, int, int *, int *, int *);
-
+int sniper(int *, int, int);
 int solve_nsnipers(int *battlefield, int n){
 	int *board, count = 0;
 	if ((battlefield == NULL) || (n <= 3))
 		return 0;
-	board = (int *)malloc(n*sizeof(int));
-	queen(1, n, board, battlefield, &count);
-	return count;
+	return sniper(battlefield, 0, n);
 }
-void print(int n, int *board, int *battlefield)
-{
-	int i, j;
-	for (i = 1; i <= n; ++i)
-	{
-		for (j = 1; j <= n; ++j)
-		{
-			if (board[i] == j)
-			{
-				battlefield[((i - 1) * n) + (j - 1)] = 1;
-			}
-		}
-	}
-}
-int place(int row, int column, int *board)
+int sniper(int *board, int col, int N)
 {
 	int i;
-	for (i = 1; i <= row - 1; ++i)
+	if (col >= N)
+		return 1;
+	for (i = 0; i < N; i++)
 	{
-		if ((board[i] == column) || (abs(board[i] - column) == abs(i - row)))
-			return 0;
-	}
-	return 1;
-}
-void queen(int row, int n, int *board, int *battlefield, int *c)
-{
-	int column, k;
-	if (*c != 1)
-	{
-		for (column = 1; column <= n; ++column)
+		if (isSafe(board, i, col, N))
 		{
-			if (place(row, column, board))
-			{
-				board[row] = column;
-				if (row == n)
-				{
-					*c = 1;
-					print(n, board, battlefield);
-					return;
-				}
-				else
-					queen(row + 1, n, board, battlefield, c);
-			}
+			board[(i*N)+col] = 1;
+			if (sniper(board, col + 1, N))
+				return 1;
+			board[(i*N)+col] = 0;
 		}
 	}
+	return 0;
+}
+int isSafe(int *board, int row, int col, int N)
+{
+	int i, j;
+	for (i = 0; i < col; i++)
+		if (board[(row*N)+i])
+			return 0;
+	for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
+		if (board[(i*N)+j])
+			return 0;
+	for (i = row, j = col; j >= 0 && i<N; i++, j--)
+		if (board[(i*N)+j])
+			return 0;
+	return 1;
 }

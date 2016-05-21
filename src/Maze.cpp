@@ -44,7 +44,6 @@ int path_exists(int *maze, int rows, int columns, int x1, int y1, int x2, int y2
 	else
 	{
 		path(maze, rows, columns, x1, y1, x2, y2, &p);
-		update(maze, rows, columns);
 		return p;
 	}
 }
@@ -63,13 +62,6 @@ void path(int *maze, int rows, int columns, int x1, int y1, int x2, int y2, int 
 			path(maze, rows, columns, x1 + 1, y1, x2, y2, p);
 		if (((y1 - 1) >= 0) && (maze[(x1*columns) + y1 - 1] == 1))
 			path(maze, rows, columns, x1, y1 - 1, x2, y2, p);
+		maze[(x1*columns) + y1] = 1;
 	}
-}
-void update(int *maze, int rows, int columns)
-{
-	int i, j;
-	for (i = 0; i < rows; i++)
-		for (j = 0; j < columns; j++)
-			if (maze[(i*columns) + j] == 2)
-				maze[(i*columns) + j] = 1;
 }
